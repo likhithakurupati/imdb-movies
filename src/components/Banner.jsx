@@ -6,8 +6,8 @@ export default function Banner() {
         backgroundImage: `url(https://w0.peakpx.com/wallpaper/482/599/HD-wallpaper-dune-2021-movie.jpg)`,
       }}
     >
-      <div className="text-white text-xl text-center w-full bg-gray-900/60 p-4">
-        Dune
+      <div className="text-white text-2xl text-center w-full bg-gray-900/60 p-4">
+        Dune 2
       </div>
     </div>
   );

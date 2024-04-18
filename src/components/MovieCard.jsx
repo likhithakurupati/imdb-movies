@@ -1,12 +1,14 @@
-export default function MovieCard() {
+export default function MovieCard({ poster_path, name }) {
   return (
     <div
-      className="h-[40vh] w-[200px] bg-cover bg-center rounded-xl hover:scale-110 duration-300 cursor-pointer flex flex-col justify-between justify-items-end"
+      className="h-[40vh] w-[200px] bg-cover bg-center rounded-xl hover:scale-110 duration-300 cursor-pointer flex flex-row justify-between items-end"
       style={{
-        backgroundImage: `url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6pJJJhfMasMfukl1HnuVuX0Mhgyy5hJ_FqQ&s)`,
+        backgroundImage: `url(https://image.tmdb.org/t/p/original/${poster_path})`,
       }}
     >
-      <div>Card</div>
+      <div className="text-white text-xl w-full p-2 text-center bg-gray-900/60">
+        {name}
+      </div>
     </div>
   );
 }
