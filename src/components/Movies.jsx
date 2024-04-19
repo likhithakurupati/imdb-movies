@@ -3,11 +3,7 @@ import axios from "axios";
 import MovieCard from "./MovieCard";
 import Pagination from "./Pagination";
 
-export default function Movies({
-  handleAddToWatchList,
-  handleRemoveFromWatchList,
-  watchList,
-}) {
+export default function Movies() {
   const [movies, setMovies] = useState([]);
   const [pageNo, setPageNo] = useState(1);
 
@@ -38,9 +34,6 @@ export default function Movies({
               poster_path={movieObj.poster_path}
               name={movieObj.original_title}
               movieObj={movieObj}
-              handleAddToWatchList={handleAddToWatchList}
-              handleRemoveFromWatchList={handleRemoveFromWatchList}
-              watchList={watchList}
             />
           );
         })}

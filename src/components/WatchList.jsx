@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import genreids from "../utilities/genre";
+import { WatchListContext } from "./WatchListContext";
 
 /* eslint-disable react/jsx-key */
-export default function WatchList({
-  watchList,
-  setWatchList,
-  handleRemoveFromWatchList,
-}) {
+export default function WatchList() {
   const [search, setSearch] = useState("");
   const [genreList, setGenreList] = useState(["All Genres"]);
   const [currGenre, setCurrGenre] = useState("All Genres");
+
+  const watchListData = useContext(WatchListContext);
 
   let handleSearch = (e) => {
     setSearch(e.target.value);
@@ -20,39 +19,38 @@ export default function WatchList({
   };
 
   let sortIncreasingRatings = () => {
-    let sortedIncreasing = watchList.sort((movieA, movieB) => {
+    let sortedIncreasing = watchListData.watchList.sort((movieA, movieB) => {
       return movieA.vote_average - movieB.vote_average;
     });
-    setWatchList([...sortedIncreasing]);
+    watchListData.setWatchList([...sortedIncreasing]);
   };
   let sortDecreasingRatings = () => {
-    let sortedDecreasing = watchList.sort((movieA, movieB) => {
+    let sortedDecreasing = watchListData.watchList.sort((movieA, movieB) => {
       return movieB.vote_average - movieA.vote_average;
     });
-    setWatchList([...sortedDecreasing]);
+    watchListData.setWatchList([...sortedDecreasing]);
   };
 
   let sortIncreasingPopularity = () => {
-    let sortedIncreasing = watchList.sort((movieA, movieB) => {
+    let sortedIncreasing = watchListData.watchList.sort((movieA, movieB) => {
       return movieA.popularity - movieB.popularity;
     });
-    setWatchList([...sortedIncreasing]);
+    watchListData.setWatchList([...sortedIncreasing]);
   };
   let sortDecreasingPopularity = () => {
-    let sortedDecreasing = watchList.sort((movieA, movieB) => {
+    let sortedDecreasing = watchListData.watchList.sort((movieA, movieB) => {
       return movieB.popularity - movieA.popularity;
     });
-    setWatchList([...sortedDecreasing]);
+    watchListData.setWatchList([...sortedDecreasing]);
   };
 
   useEffect(() => {
-    let updatedGenreList = watchList.map((movieObj) => {
+    let updatedGenreList = watchListData.watchList.map((movieObj) => {
       return genreids[movieObj.genre_ids[0]];
     });
     updatedGenreList = new Set(updatedGenreList);
     setGenreList(["All Genres", ...updatedGenreList]);
-    console.log(updatedGenreList);
-  }, [watchList]);
+  }, [watchListData.watchList]);
 
   return (
     <>
@@ -113,7 +111,7 @@ export default function WatchList({
             </tr>
           </thead>
           <tbody>
-            {watchList
+            {watchListData.watchList
               .filter((movieObj) => {
                 if (currGenre == "All Genres") {
                   return true;
@@ -140,7 +138,9 @@ export default function WatchList({
                     <td>{movieObj.popularity}</td>
                     <td>{genreids[movieObj.genre_ids[0]]}</td>
                     <td
-                      onClick={() => handleRemoveFromWatchList(movieObj)}
+                      onClick={() =>
+                        watchListData.handleRemoveFromWatchList(movieObj)
+                      }
                       className="text-red-800"
                     >
                       Delete

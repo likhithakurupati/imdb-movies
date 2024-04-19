@@ -5,15 +5,15 @@ import { Navbar } from "./components/Navbar";
 import WatchList from "./components/WatchList";
 import Banner from "./components/Banner";
 import { useState, useEffect } from "react";
+import { WatchListContext } from "./components/WatchListContext";
 
 function App() {
-  let [watchList, setWatchList] = useState([]);
+  const [watchList, setWatchList] = useState([]);
 
   let handleAddToWatchList = (movieObj) => {
     let newWatchList = [...watchList, movieObj];
     localStorage.setItem("movieApp", JSON.stringify(newWatchList));
     setWatchList(newWatchList);
-    console.log(newWatchList);
   };
 
   let handleRemoveFromWatchList = (movieObj) => {
@@ -22,7 +22,6 @@ function App() {
     });
     localStorage.setItem("movieApp", JSON.stringify(filteredWatchList));
     setWatchList(filteredWatchList);
-    console.log(filteredWatchList);
   };
 
   useEffect(() => {
@@ -32,6 +31,13 @@ function App() {
     }
     setWatchList(JSON.parse(movieFromLocalStorage));
   }, []);
+
+  const watchListContext = {
+    watchList,
+    setWatchList,
+    handleAddToWatchList,
+    handleRemoveFromWatchList,
+  };
 
   return (
     <>
@@ -43,22 +49,18 @@ function App() {
             element={
               <>
                 <Banner />
-                <Movies
-                  handleAddToWatchList={handleAddToWatchList}
-                  handleRemoveFromWatchList={handleRemoveFromWatchList}
-                  watchList={watchList}
-                />
+                <WatchListContext.Provider value={watchListContext}>
+                  <Movies />
+                </WatchListContext.Provider>
               </>
             }
           />
           <Route
             path="/watchlist"
             element={
-              <WatchList
-                watchList={watchList}
-                setWatchList={setWatchList}
-                handleRemoveFromWatchList={handleRemoveFromWatchList}
-              />
+              <WatchListContext.Provider value={watchListContext}>
+                <WatchList />
+              </WatchListContext.Provider>
             }
           />
         </Routes>
