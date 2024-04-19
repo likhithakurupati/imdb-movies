@@ -1,11 +1,13 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/jsx-key */
 import { useEffect, useState } from "react";
 import axios from "axios";
 import MovieCard from "./MovieCard";
 import Pagination from "./Pagination";
 
-export default function Movies() {
+export default function Movies({
+  handleAddToWatchList,
+  handleRemoveFromWatchList,
+  watchList,
+}) {
   const [movies, setMovies] = useState([]);
   const [pageNo, setPageNo] = useState(1);
 
@@ -17,14 +19,11 @@ export default function Movies() {
     setPageNo(pageNo + 1);
   };
   const moviesApiKey = import.meta.env.VITE_APP_MOVIES_API_KEY;
+  const moviesApiUrl = `https://api.themoviedb.org/3/movie/popular?api_key=${moviesApiKey}&language=en-US&page=${pageNo}`;
   useEffect(() => {
-    axios
-      .get(
-        `https://api.themoviedb.org/3/movie/popular?api_key=${moviesApiKey}&language=en-US&page=${pageNo}`
-      )
-      .then(function (res) {
-        setMovies(res.data.results);
-      });
+    axios.get(moviesApiUrl).then(function (res) {
+      setMovies(res.data.results);
+    });
   }, [pageNo]);
 
   return (
@@ -38,6 +37,10 @@ export default function Movies() {
               key={movieObj.original_title}
               poster_path={movieObj.poster_path}
               name={movieObj.original_title}
+              movieObj={movieObj}
+              handleAddToWatchList={handleAddToWatchList}
+              handleRemoveFromWatchList={handleRemoveFromWatchList}
+              watchList={watchList}
             />
           );
         })}
